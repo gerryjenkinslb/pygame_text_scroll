@@ -57,7 +57,46 @@ class TextScroll:
 
 YELLOW = (255, 255, 0)
 BLACK = (0, 0, 0)
-STORY = """
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+
+STORY1 = """line one of text
+second line of text
+third line of text
+** last line of text that fits
+next line should force scroll up
+and here again for
+each line the follows"""
+
+def example1():
+    # start up pygame
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "1560,100"
+    pygame.init()
+    # print(sorted(pygame.font.get_fonts()))
+    screen = pygame.display.set_mode((800, 500))
+    screen.fill(WHITE)
+    clock = pygame.time.Clock()
+
+    font = pygame.font.SysFont("Liberation Sans", 30)
+    area = pygame.Rect(50, 50, 700, 142)
+    box = area.inflate(12, 12)
+    print(area)
+    pygame.draw.rect(screen, BLUE, box, 3)
+    message = TextScroll(area, font, BLACK, WHITE, STORY1, ms_per_line=700)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit(0)
+        else:
+            # screen.fill(pygame.color.Color('black'))
+            message.update()
+            message.draw(screen)
+            pygame.display.flip()
+            clock.tick(60)
+
+STORY2 = """
 Shall I compare thee to a summer’s day?
 Thou art more lovely and more temperate:
 Rough winds do shake the darling buds of May,
@@ -76,7 +115,7 @@ When in eternal lines to time thou grow’st:
   --- William Shakespeare"""
 
 
-def main():
+def example2():
     # start up pygame
     os.environ['SDL_VIDEO_WINDOW_POS'] = "1560,100"
     pygame.init()
@@ -85,7 +124,7 @@ def main():
     clock = pygame.time.Clock()
 
     font = pygame.font.SysFont("Liberation Sans", 30)
-    message = TextScroll(pygame.Rect(50, 50, 700, 400), font, YELLOW, BLACK, STORY, ms_per_line=300)
+    message = TextScroll(pygame.Rect(50, 50, 700, 400), font, YELLOW, BLACK, STORY2, ms_per_line=300)
 
     while True:
         for event in pygame.event.get():
@@ -99,6 +138,5 @@ def main():
             pygame.display.flip()
             clock.tick(60)
 
-
 if __name__ == "__main__":
-    main()
+    example1()
