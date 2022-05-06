@@ -3,9 +3,14 @@ import time
 import os
 import sys
 
+YELLOW = (255, 255, 0)
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+BLUE = (0, 0, 255)
+GREY = (200, 200, 200)
 
 class TextScroll:
-    def __init__(self, area, font, fg_color, bk_color, text, ms_per_line=300):
+    def __init__(self, area, font, fg_color, bk_color, text, ms_per_line=800):
         """object to display lines of text scrolled in with a delay between each line
         in font and fg_color with background o fk_color with in the area rect"""
 
@@ -29,10 +34,12 @@ class TextScroll:
             self.surface.blit(self.surface, (0, -self.y_delta))  # scroll up
             self.y += -self.y_delta  # backup a line
             pygame.draw.rect(self.surface, self.bk_color,
-                             (0, self.y, self.size[0], self.size[1] - self.y))  # erase area
+                             (0, self.y, self.size[0], self.size[1] - self.y))
 
         text = self.font.render(line, True, self.fg_color)
+        # pygame.draw.rect(text, GREY, text.get_rect(), 1)  # for demo show render area
         self.surface.blit(text, (0, self.y))
+
         self.y += self.y_delta
 
     # call update from pygame main loop
@@ -55,34 +62,30 @@ class TextScroll:
 
 # Test this Class
 
-YELLOW = (255, 255, 0)
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-BLUE = (0, 0, 255)
-
-STORY1 = """line one of text
+STORY1 = """FIRST LINE OF TEXT
 second line of text
 third line of text
 ** last line of text that fits
-next line should force scroll up
+this line should force scroll up
 and here again for
 each line the follows"""
 
 def example1():
     # start up pygame
-    os.environ['SDL_VIDEO_WINDOW_POS'] = "1560,100"
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "1000,100"
     pygame.init()
     # print(sorted(pygame.font.get_fonts()))
-    screen = pygame.display.set_mode((800, 500))
-    screen.fill(WHITE)
+    screen = pygame.display.set_mode((505, 250))
+    screen.fill(GREY)
     clock = pygame.time.Clock()
 
     font = pygame.font.SysFont("Liberation Sans", 30)
-    area = pygame.Rect(50, 50, 700, 142)
-    box = area.inflate(12, 12)
-    print(area)
-    pygame.draw.rect(screen, BLUE, box, 3)
-    message = TextScroll(area, font, BLACK, WHITE, STORY1, ms_per_line=700)
+    area = pygame.Rect(20, 20, 400, 142)
+    box = area.inflate(2, 2)
+    pygame.draw.rect(screen, BLUE, box, 1)
+    pygame.display.flip()
+    pygame.time.delay(500)
+    message = TextScroll(area, font, BLACK, WHITE, STORY1, ms_per_line=500)
 
     while True:
         for event in pygame.event.get():
@@ -96,35 +99,35 @@ def example1():
             pygame.display.flip()
             clock.tick(60)
 
-STORY2 = """
-Shall I compare thee to a summer’s day?
-Thou art more lovely and more temperate:
-Rough winds do shake the darling buds of May,
-And summer’s lease hath all too short a date;
-Sometime too hot the eye of heaven shines,
-And often is his gold complexion dimm'd;
-And every fair from fair sometime declines,
-By chance or nature’s changing course untrimm'd;
-But thy eternal summer shall not fade,
-Nor lose possession of that fair thou ow’st;
-Nor shall death brag thou wander’st in his shade,
-When in eternal lines to time thou grow’st:
-  So long as men can breathe or eyes can see,
-  So long lives this, and this gives life to thee.
+STORY2 = """No man is an island,
+Entire of itself,
+Every man is a piece of the continent,
+A part of the main.
 
-  --- William Shakespeare"""
+If a clod be washed away by the sea,
+Europe is the less.
+As well as if a promontory were.
+As well as if a manor of thy friend’s
+
+Or of thine own were:
+Any man’s death diminishes me,
+Because I am involved in mankind,
+And therefore never send to 
+know for whom the bell tolls;
+It tolls for thee.
+  -- John Donne (Year 1624 AD)"""
 
 
 def example2():
     # start up pygame
-    os.environ['SDL_VIDEO_WINDOW_POS'] = "1560,100"
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "840,500"
     pygame.init()
     # print(sorted(pygame.font.get_fonts()))
-    screen = pygame.display.set_mode((800, 500))
+    screen = pygame.display.set_mode((1150, 480))
     clock = pygame.time.Clock()
 
-    font = pygame.font.SysFont("Liberation Sans", 30)
-    message = TextScroll(pygame.Rect(50, 50, 700, 400), font, YELLOW, BLACK, STORY2, ms_per_line=300)
+    font = pygame.font.SysFont("Liberation Sans", 65)
+    message = TextScroll(pygame.Rect(25, 0, 1100, 460), font, YELLOW, BLACK, STORY2, ms_per_line=300)
 
     while True:
         for event in pygame.event.get():
